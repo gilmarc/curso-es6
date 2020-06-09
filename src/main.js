@@ -14,27 +14,31 @@ class App{
     }
 
     async addRepositorio(event){
-        event.preventDefault();
-        const repoInput = this.inputEl.value;
-        console.log(response);
+        try{
+            event.preventDefault();
+            const repoInput = this.inputEl.value;
+            console.log(response);
 
-        if(repoInput.length === 0){
-            return;
-        }
+            if(repoInput.length === 0){
+                return;
+            }
 
-        const response = await api.get(`repos/gilmarc/${repoInput}`);
-        console.log(response);
+            const response = await api.get(`repos/gilmarc/${repoInput}`);
+            console.log(response);
 
-        const {name, description, owner:{avatar_url, html_url} } = response.data;
+            const {name, description, owner:{avatar_url, html_url} } = response.data;
 
-        if(response.status === 200){
-            this.repositorios.push({
-                nome:name,
-                descricao:description,
-                avatar_url:avatar_url,
-                html_url:html_url
-            });
-            this.render();
+            if(response.status === 200){
+                this.repositorios.push({
+                    nome:name,
+                    descricao:description,
+                    avatar_url:avatar_url,
+                    html_url:html_url
+                });
+                this.render();
+            }
+        }catch(e){
+            console.log("Erro na requisição! "+e)
         }
     }
 
