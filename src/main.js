@@ -13,6 +13,17 @@ class App{
         this.formEl.onsubmit = event => this.addRepositorio(event);
     }
 
+    setLoading(loading = true){
+        if(loading === true){
+            let loadingEl = document.createElement('span');
+            loadingEl.appendChild(document.createTextNode('Carregando'));
+            loadingEl.setAttribute('id','loading');
+            this.formEl.appendChild(loadingEl);
+        }else{
+            document.getElementById('loading').remove();
+        }
+    }
+
     async addRepositorio(event){
         try{
             event.preventDefault();
@@ -22,6 +33,8 @@ class App{
             if(repoInput.length === 0){
                 return;
             }
+
+            this.setLoading();
 
             const response = await api.get(`repos/gilmarc/${repoInput}`);
             console.log(response);
@@ -36,10 +49,12 @@ class App{
                     html_url:html_url
                 });
                 this.render();
+                this.inputEl.value = "";
             }
         }catch(e){
-            console.log("Erro na requisição! "+e)
+            alert("Erro na requisição! "+e);
         }
+        this.setLoading(false);
     }
 
     render(){
